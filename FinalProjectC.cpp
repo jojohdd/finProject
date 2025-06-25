@@ -133,3 +133,16 @@ void Logic() { //Тіло за головою
         nhvost++;
     }
 }
+
+int main() {
+    st();
+    int speed = 300;
+    while (!gameOver) {
+        Draw();
+        Input();
+        Logic();
+        Sleep(speed); // затримка
+    }
+    cout << "Game Over!" << endl;
+    return 0;
+}
