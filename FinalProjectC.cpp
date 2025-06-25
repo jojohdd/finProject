@@ -64,3 +64,72 @@ void Draw() {
     cout << endl;
     cout << "Score: " << score << endl;
 }
+
+void Input() { // W A S D X
+    if (_kbhit()) {
+        switch (_getch()) {
+        case 'a':
+            if (dir != RIGHT) dir = LEFT;
+            break;
+        case 'd':
+            if (dir != LEFT) dir = RIGHT;
+            break;
+        case 'w':
+            if (dir != DOWN) dir = UP;
+            break;
+        case 's':
+            if (dir != UP) dir = DOWN;
+            break;
+        case 'x': //Закінчення гри 
+            gameOver = true;
+            break;
+        }
+    }
+}
+
+
+void Logic() { //Тіло за головою
+    int prevX = x;
+    int prevY = y;
+    int prev2X, prev2Y;
+    if (nhvost > 0) {
+        hvost.insert(hvost.begin(), { x, y });
+        if (hvost.size() > nhvost)
+            hvost.pop_back();
+    }
+
+    switch (dir) { //Переміщення змійки
+    case LEFT:
+        x--;
+        break;
+    case RIGHT:
+        x++;
+        break;
+    case UP:
+        y--;
+        break;
+    case DOWN:
+        y++;
+        break;
+    default:
+        break;
+    }
+
+    //Вихід за межі поля
+    if (x >= width || x < 0 || y >= height || y < 0)
+        gameOver = true;
+
+    //Зіткнення з хвостом
+    for (auto segment : hvost) {
+        if (segment.first == x && segment.second == y)
+            gameOver = true;
+    }
+
+    //Фрукт з'їли
+    if (x == fruitX && y == fruitY) {
+        score += 10;
+        fruitX = rand() % width;
+        fruitY = rand() % height;
+        nhvost++;
+    }
+}
